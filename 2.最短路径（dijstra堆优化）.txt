@@ -1,0 +1,40 @@
+#include <vector>
+#include <queue>
+#include <climits>
+
+using namespace std;
+
+class Solution {
+public:
+    int dijkstra(int n, vector<vector<pair<int, int>>>& graph, int start, int end) {
+        // 初始化距离数组，所有节点的距离初始化为无穷大
+        vector<int> dist(n, INT_MAX);
+        dist[start] = 0; // 起点的距离为 0
+
+        // 优先队列（最小堆），存储 {距离, 节点}
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.emplace(0, start); // 将起点加入队列
+
+        while (!pq.empty()) {
+            auto [currDist, currNode] = pq.top(); // 取出当前距离最小的节点
+            pq.pop();
+
+            // 如果当前节点的距离已经大于记录的距离，跳过
+            if (currDist > dist[currNode]) continue;
+
+            // 遍历当前节点的所有邻居
+            for (auto& [nextNode, weight] : graph[currNode]) {
+                int nextDist = currDist + weight; // 计算新的距离
+
+                // 如果新的距离更小，更新距离并加入队列
+                if (nextDist < dist[nextNode]) {
+                    dist[nextNode] = nextDist;
+                    pq.emplace(nextDist, nextNode);
+                }
+            }
+        }
+
+        // 返回终点的最短距离
+        return dist[end] == INT_MAX ? -1 : dist[end]; // 如果不可达，返回 -1
+    }
+};

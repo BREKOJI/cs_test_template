@@ -1,0 +1,52 @@
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int n = s.length();
+        // 中心扩散法
+        if (n == 0 || n == 1) return s;
+
+        int maxstart = 0; // 最长回文子串的起始位置
+        int maxend = 0;   // 最长回文子串的结束位置
+        int left = 0;     // 左指针
+        int right = 0;    // 右指针
+        int maxlen = 0;   // 最长回文子串的长度
+
+        for (int i = 0; i < n; i++) {
+            int len = 1; // 当前回文子串的长度，至少为1（当前字符）
+            left = i - 1;
+            right = i + 1;
+
+            // 向左扩展，处理相同字符的情况
+            while (left >= 0 && s[left] == s[i]) {
+                left--;
+                len++;
+            }
+
+            // 向右扩展，处理相同字符的情况
+            while (right < n && s[right] == s[i]) {
+                right++;
+                len++;
+            }
+
+            // 向左右同时扩展，处理左右字符相等的情况
+            while (left >= 0 && right < n && s[right] == s[left]) {
+                len += 2;
+                left--;
+                right++;
+            }
+
+            // 更新最长回文子串的信息
+            if (len > maxlen) {
+                maxlen = len;
+                maxstart = left + 1;
+                maxend = right - 1;
+            }
+        }
+
+        // 返回最长回文子串
+        return s.substr(maxstart, maxlen);
+    }
+};

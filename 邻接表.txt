@@ -1,0 +1,32 @@
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start_node, int end_node) {
+        vector<vector<pair<int, double>>> adj(n);
+        for (int i = 0; i < int(edges.size()); i ++ ) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            double prob = succProb[i];
+            adj[u].emplace_back(v, prob);
+            adj[v].emplace_back(u, prob);
+        }
+        vector<bool> visit(n, false);
+        vector<double> probs(n, 0.0);
+        probs[start_node] = 1.0;
+        priority_queue<pair<double, int>> pq;
+        pq.emplace(1.0, start_node);
+        while (!pq.empty()) {
+            auto [currProb, currNode] = pq.top();
+            pq.pop();
+            if (visit[currNode]) continue;
+            visit[currNode] = true;
+            if (currNode == end_node) return currProb;
+            for (auto & [nextNode, nextProb] : adj[currNode]) {
+                if (!visit[nextNode] && currProb * nextProb > probs[nextNode]) {
+                    probs[nextNode] = currProb * nextProb;
+                    pq.emplace(probs[nextNode], nextNode);
+                }
+            }
+        }
+        return 0.0;
+    }
+};

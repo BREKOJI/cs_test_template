@@ -1,0 +1,64 @@
+#include <iostream>
+using namespace std;
+typedef struct Node {
+    int number;
+    struct Node* lchild, * rchild;
+
+}Node;
+void inserNode(Node* &T, int num);  //插入节点
+void inOrder(Node* T_father, Node* T_child);    //中序遍历
+
+int main() {
+    int n;
+    cin >> n;
+    Node* biTree = NULL;    //指向根节点
+    while (n--) {           //构造二叉搜索树
+        int tempNum;
+        cin >> tempNum;
+        inserNode(biTree, tempNum);
+    }
+
+    inOrder(NULL, biTree);
+
+    return 0;
+}
+
+
+//递归插入节点
+void inserNode(Node* &T, int num) { 
+    if (T == NULL) {    
+        Node* p = new Node;
+        p->number = num;
+        p->lchild = NULL;
+        p->rchild = NULL;
+        T = p;
+        return;
+    }
+    else {  
+        if (num <= T->number) {
+            inserNode(T->lchild, num);
+        }
+        else
+        {
+            inserNode(T->rchild, num);
+        }
+
+    }
+}
+
+//中序遍历
+void inOrder(Node* T_father, Node* T_child) {
+    if (T_child != NULL) {
+        inOrder(T_child, T_child->lchild);
+
+        if (T_father == NULL) { 
+            cout << 0 << " ";   //根节点的父节点元素为 0
+        }
+        else
+        {
+            cout << T_father->number << " ";
+        }
+
+        inOrder(T_child, T_child->rchild);
+    }
+}
