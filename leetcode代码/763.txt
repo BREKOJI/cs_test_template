@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        unordered_map<char, pair<int, int>> count;
+        for (int i = 0; i < int(s.size()); i ++ ) {
+            if (count.find(s[i]) != count.end())
+                count[s[i]].second = i;
+            else count[s[i]].first = count[s[i]].second = i;
+        }
+        cout << count.size() << endl;
+        vector<pair<int, int>> rgs;
+        for (auto &p : count)
+            rgs.emplace_back(p.second);
+        sort(rgs.begin(), rgs.end());
+        vector<pair<int,int>> lens;
+        for (auto rg : rgs) {
+            if (lens.empty() || lens.back().second <= rg.first) lens.emplace_back(rg);
+            else lens.back().second = max(rg.second, lens.back().second);
+        } 
+        vector<int> ans;
+        for (auto len : lens) {
+            ans.push_back(len.second - len.first + 1);
+        }
+        return ans;
+    }
+};

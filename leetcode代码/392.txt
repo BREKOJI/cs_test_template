@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int n = s.size(), m = t.size();
+        if (n == 0) return true;
+        vector<bool> dp(n, false);
+        dp[0] = true;
+        int pos = 0;
+        for (int i = 1; i <= n; i ++ ) {
+            char c = s[i - 1];
+            while (pos < m) {
+                if (c == t[pos ++ ]) {
+                    dp[i] = dp[i - 1];
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+};

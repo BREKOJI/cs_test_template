@@ -1,0 +1,22 @@
+class Solution {
+    vector<int> parent;
+    int Find(int node) {
+        if (parent[node] != node) parent[node] = Find(parent[node]);
+        return parent[node];
+    }
+    void Union(int node1, int node2) {
+        parent[Find(node1)] = Find(node2);
+    }
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n = edges.size();
+        parent.resize(n + 1);
+        for (int i = 1; i <= n; i ++ ) parent[i] = i;
+        for (auto edge : edges) {
+            int node1 = edge[0], node2 = edge[1];
+            if (Find(node1) != Find(node2)) Union(node1, node2);
+            else return edge;
+        }
+        return {};
+    }
+};

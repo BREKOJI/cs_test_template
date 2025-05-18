@@ -1,0 +1,25 @@
+class Solution {
+    int res = 0;
+    int n, m;
+    void count(vector<vector<char>> & grid, int i, int j) {
+        if (i < 0 || i >= n || j < 0 || j >= m || grid[i][j] != '1') return;
+        grid[i][j] = '2';
+        count(grid, i + 1, j);
+        count(grid, i, j + 1);
+        count(grid, i - 1, j);
+        count(grid, i, j - 1);
+    }
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        n = grid.size(), m = grid[0].size();
+        for (int i = 0; i < n; i ++ ) {
+            for (int j = 0; j < m; j ++ ) {
+                if (grid[i][j] == '1') {
+                    res ++ ;
+                    count(grid, i, j);
+                }
+            }
+        }
+        return res;
+    }
+};

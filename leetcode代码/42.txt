@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int n = height.size();
+        int l = 0, r = n - 1;
+        int hl = 0, hr = 0;
+        int sum = 0;
+        while (l < r) {
+            hl = max(height[l], hl);
+            hr = max(height[r], hr);
+            if (height[l] < height[r]) {
+                sum += hl - height[l];
+                l ++;
+            }
+            else {
+                sum += hr - height[r];
+                r -- ;
+            }
+        }
+        return sum;
+    }
+};

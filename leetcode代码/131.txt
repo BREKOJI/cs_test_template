@@ -1,0 +1,31 @@
+class Solution {
+    vector<vector<string>> res;
+    vector<vector<int>> f;
+    vector<string> ans;
+    int n;
+    void dfs(const string& s, int i) {
+        if (i == n) {
+            res.push_back(ans);
+            return;
+        }
+        for (int j = i; j < n; ++j) {
+            if (f[i][j]) {
+                ans.push_back(s.substr(i, j - i + 1));
+                dfs(s, j + 1);
+                ans.pop_back();
+            }
+        }
+    }
+public:
+    vector<vector<string>> partition(string s) {
+        n = s.size();
+        f.assign(n, vector<int>(n, true));
+        for (int r = 0; r < n; r ++ ) {
+            for (int l = r - 1; l >= 0; l -- ) {
+                f[l][r] = (s[l] == s[r]) && f[l + 1][r - 1];
+            }
+        }
+        dfs(s, 0);
+        return res;
+    }
+};

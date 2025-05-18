@@ -1,0 +1,26 @@
+class Solution {
+    unordered_map<char, int> ori, cnt;
+    bool check() {
+        for (auto & p : ori)
+            if (cnt[p.first] < p.second) return false;
+        return true; 
+    }
+public:
+    string minWindow(string s, string t) {
+        for (auto & c : t) 
+            ori[c] ++ ;
+        int l = 0, r = -1, n = s.size();//s.size()是size_t类型
+        int len = INT_MAX, ansL = -1;
+        while (r < n) {
+            cnt[s[ ++ r]] ++ ;
+            while (check() && l <= r) {
+                if (r - l + 1 < len) {
+                    len = r - l + 1;
+                    ansL = l;
+                }
+                cnt[s[l ++ ]] -- ;
+            }
+        }
+        return ansL == -1 ? string() : s.substr(ansL, len);
+    }
+};

@@ -1,0 +1,25 @@
+class Solution {
+    void backtrack(vector<vector<int>> &res, vector<int> &candidates, int index, int sum, int target, vector<int> temp) {
+        if (sum == target) {
+            res.emplace_back(temp);
+            return;
+        }
+        else if (sum > target) return;
+        for (int i = index; i < (int)candidates.size(); i ++ ) {
+            temp.emplace_back(candidates[i]);
+            sum += candidates[i];
+            backtrack(res, candidates, i, sum, target, temp);
+            sum -= candidates[i];
+            temp.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> res;
+        int sum = 0;
+        int index = 0;
+        vector<int> temp;
+        backtrack(res, candidates, index, sum, target, temp);
+        return res;
+    }
+};

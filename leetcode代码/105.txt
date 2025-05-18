@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    vector<int> preorder;
+    unordered_map<int, int> dic;//每个值唯一，所以可以用这个映射
+    TreeNode * recur(int root, int left, int right) {
+        if (left > right) return NULL;
+        TreeNode * node = new TreeNode(preorder[root]);
+        int i = dic[preorder[root]];
+        node -> left = recur(root + 1, left, i - 1);
+        node -> right = recur(root + i - left + 1, i + 1, right);
+        return node;
+    }
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        this -> preorder = preorder;
+        for (int i = 0; i < inorder.size(); i ++ )
+            dic[inorder[i]] = i;
+        return recur(0, 0, inorder.size() - 1);
+    }
+};

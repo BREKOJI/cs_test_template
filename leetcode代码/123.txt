@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        // 2-两次交易 2-持股状态和非持股状态
+        int dp[2][n][2];
+        memset(dp, 0, sizeof(dp));
+        dp[0][0][0] = -prices[0];
+        dp[0][0][1] = 0;
+        dp[1][0][0] = -prices[0];
+        dp[1][0][1] = 0;
+        for (int j = 1; j < n; j ++ ) {
+            dp[0][j][0] = max(dp[0][j - 1][0], -prices[j]);
+            dp[0][j][1] = max(dp[0][j - 1][1], dp[0][j - 1][0] + prices[j]);
+            dp[1][j][0] = max(dp[0][j - 1][1] - prices[j], dp[1][j - 1][0]);
+            dp[1][j][1] = max(dp[1][j - 1][1], dp[1][j - 1][0] + prices[j]);
+        }
+        return max(dp[1][n - 1][1], dp[0][n - 1][1]);
+    }
+};

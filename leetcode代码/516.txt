@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        int n = s.size();
+        vector dp(n, vector<int> (n));
+        for (int r = 0; r < n; r ++ ) {
+            dp[r][r] = 1;
+            for (int l = r - 1; l >= 0; l -- )
+                if (s[l] == s[r])
+                    if (r - l == 1) dp[l][r] = 2;
+                    else dp[l][r] = dp[l + 1][r - 1] + 2;  
+                else dp[l][r] = max(dp[l][r - 1], dp[l + 1][r]);
+        }
+        return dp[0][n - 1];
+    }
+};

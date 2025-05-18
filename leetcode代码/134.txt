@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int len = gas.size();
+        int MIN = INT_MAX;
+        int gas_remain = 0;
+        int minIndex;
+        for (int i = 0; i < len; i ++ ) {
+            gas_remain += gas[i] - cost[i];
+            if (gas_remain < MIN) {
+                MIN = gas_remain;
+                minIndex = i;
+            }
+        }
+        return gas_remain < 0 ? -1 : (minIndex + 1) % len;
+    }
+};

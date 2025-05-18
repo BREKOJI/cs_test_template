@@ -1,0 +1,42 @@
+class Solution {
+    vector<vector<string>> list;
+    vector<string> path;
+    vector<bool> col;
+    vector<bool> dig1; // 正对角线
+    vector<bool> dig2; // 斜对角线
+    int len;
+    void dfs(int row) {
+        if (row == len) {
+            if (!path.empty())
+                list.emplace_back(path);
+            return;
+        }
+        string line(len, '.');
+        for (int c = 0; c < len; c ++ ) {
+            int b1 = row - c + len; // 正对角线
+            int b2 = row + c; // 斜对角线
+            if (!col[c] && !dig1[b1] && !dig2[b2]) {
+                line[c] = 'Q';
+                col[c] = true;
+                dig1[b1] = true;
+                dig2[b2] = true;
+                path.emplace_back(line);
+                dfs(row + 1);
+                line[c] = '.';
+                col[c] = false;
+                dig1[b1] = false;
+                dig2[b2] = false;
+                path.pop_back();
+            }
+        }
+    }
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        col.assign(n, false);
+        dig1.assign(n * 2, false);
+        dig2.assign(n * 2, false);
+        len = n;
+        dfs(0);
+        return list;
+    }
+};

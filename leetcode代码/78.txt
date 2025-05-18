@@ -1,0 +1,17 @@
+class Solution {
+    void trackback(vector<vector<int>> &res, vector<int> &output, int first, int len, vector<int> &temp) {
+        res.emplace_back(temp);
+        for (int i = first; i < len; i ++ ) {
+            temp.emplace_back(output[i]);
+            trackback(res, output, i + 1, len, temp);
+            temp.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> temp;
+        trackback(res, nums, 0, (int)nums.size(), temp);
+        return res;
+    }
+};

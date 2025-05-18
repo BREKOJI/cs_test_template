@@ -1,0 +1,27 @@
+class Solution {
+    char kuohao[2] = {'(', ')'};
+    void backtrack(vector<string> &res, int left, int right, string s, int n) {
+        if (left < right || left > n) return;
+        if (left + right == (int)s.size()) {
+            res.emplace_back(s);
+            return;
+        }
+        for (int i = 0; i < 2; i ++ ) {
+            s[left + right] = kuohao[i];
+            if (i == 0) left ++ ;
+            else right ++ ;
+            backtrack(res, left, right, s, n);
+            if (i == 0) left -- ;
+            else right -- ;
+        }
+    }
+public:
+    vector<string> generateParenthesis(int n) {
+        int left = 0;
+        int right = 0;
+        string s(2 * n, 0);
+        vector<string> res;
+        backtrack(res, left, right, s, n);
+        return res;
+    }
+};

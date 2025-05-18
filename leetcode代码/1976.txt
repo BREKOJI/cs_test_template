@@ -1,0 +1,40 @@
+class Solution {
+    const int MOD = 1e9 + 7;
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<vector<pair<int, int>>> adj(n);
+        for (int i = 0; i < int(roads.size()); i ++ ) {
+            int u = roads[i][0];
+            int v = roads[i][1];
+            int w = roads[i][2];
+            adj[u].emplace_back(v, w);
+            adj[v].emplace_back(u, w);
+        }
+        vector<int> count(n, 0);
+        count[0] = 1;
+        vector<bool> visited(n, 0);
+        vector<long long> times(n, LLONG_MAX);
+        times[0] = 0;
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<>> pq;
+        pq.emplace(0, 0);
+        while (!pq.empty()) {
+            auto [currTime, currNode] = pq.top();
+            pq.pop();
+            if (visited[currNode]) continue;
+            visited[currNode] = true;
+            if (currNode == n - 1) {
+                return count[currNode];
+            }
+            for (auto & [nextNode, nextTime] : adj[currNode]) {
+                if (!visited[nextNode] && currTime < times[nextNode] - nextTime) {
+                    count[nextNode] = count[currNode];
+                    times[nextNode] = currTime + nextTime;
+                    pq.emplace(times[nextNode], nextNode);
+                }
+                else if (!visited[nextNode] && currTime == times[nextNode] - nextTime)
+                    count[nextNode] = (count[nextNode] + count[currNode]) % MOD ;
+            }
+        }
+        return count[n - 1];
+    }
+};

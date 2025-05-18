@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        vector<pair<int, int>> in_outDegree(n + 1);
+        for (auto connection : trust) {
+            int p1 = connection[0], p2 = connection[1];
+            in_outDegree[p1].second ++ ;
+            in_outDegree[p2].first ++ ;
+        }
+        for (int i = 1; i <= n; i ++ ) {
+            int indegree = in_outDegree[i].first;
+            int outdegree = in_outDegree[i].second;
+            if (indegree == n - 1 && !outdegree) return i;
+        }
+        return -1;
+    }
+};

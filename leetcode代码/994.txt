@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int N = grid.size();
+        int M = grid[0].size();
+        queue<pair<int, int>> q;
+        int count = 0; //表示新鲜橘子数量
+        for (int r = 0; r < N; r ++ ) {
+            for (int c = 0; c < M; c ++ ) {
+                if (grid[r][c] == 1)
+                    count ++ ;
+                else if (grid[r][c] == 2)
+                    q.push({r, c});
+            }
+        }
+        int round = 0;
+        while (count > 0 && !q.empty()) {
+            round ++ ;
+            int n = q.size();
+            for (int i = 0; i < n; i ++ ) {
+                auto orange = q.front();
+                q.pop();
+                int r = orange.first;
+                int c = orange.second;
+                if (r - 1 >= 0 && grid[r - 1][c] == 1) {
+                    grid[r - 1][c] = 2;
+                    count -- ;
+                    q.push({r - 1, c});
+                }
+                if (r + 1 < N && grid[r + 1][c] == 1) {
+                    grid[r + 1][c] = 2;
+                    count -- ;
+                    q.push({r + 1, c});
+                }
+                if (c - 1 >= 0 && grid[r][c - 1] == 1) {
+                    grid[r][c - 1] = 2;
+                    count -- ;
+                    q.push({r, c - 1});
+                }
+                if (c + 1 < M && grid[r][c + 1] == 1) {
+                    grid[r][c + 1] = 2;
+                    count -- ;
+                    q.push({r, c + 1});
+                }
+            }
+        }
+        if (count > 0) return -1;
+        else return round;
+    }
+};

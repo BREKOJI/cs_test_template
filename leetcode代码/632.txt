@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        vector<pair<int, int>> ordered;
+        for (size_t k = 0; k < nums.size(); k ++ )
+            for (auto num : nums[k])
+                ordered.push_back({num, k});
+        sort(ordered.begin(), ordered.end());
+        unordered_map<int, int> count;
+        int l = 0, r = 0, k = 0; // k 记录区间内不同列表的数量
+        int ansL = 0, ansR = INT_MAX;
+        while (r < int(ordered.size())) {
+            if (! count[ordered[r].second] ++ ) k ++ ;
+            if (k == int(nums.size())) {
+                while (count[ordered[l].second] > 1) -- count[ordered[l ++ ].second];
+                if (ansR - ansL > ordered[r].first - ordered[l].first) {
+                    ansR = ordered[r].first;
+                    ansL = ordered[l].first;
+                }
+            }
+            r ++ ;
+        }
+        return {ansL, ansR};
+    }
+};

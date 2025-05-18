@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int start = 0;
+        int end = 1;
+        int ans = 0;
+        while (end < nums.size()) {
+            int maxpos = 0;
+            for (int i = start; i < end; i ++ ) 
+                maxpos = max(maxpos, i + nums[i]);
+            start = end;
+            end = maxpos + 1;
+            ans ++ ;
+        }
+        return ans;
+    }
+};

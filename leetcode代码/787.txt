@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<int> cost(n, INT_MAX);
+        cost[src] = 0;
+        queue<pair<int, int>> q;
+        q.push({src, 0});
+        for (int i = 0; i <= k; i ++ ) {
+            int size = q.size();
+            for (int j = 0; j < size; j ++ ) {
+                auto current = q.front();
+                q.pop();
+                int current_city = current.first;
+                int current_cost = current.second;
+                for (auto & flight : flights) {
+                    if (flight[0] == current_city) {
+                        int next_city = flight[1];
+                        int price = flight[2];
+                        if (current_cost + price < cost[next_city]) {
+                            cost[next_city] = current_cost + price;
+                            q.push({next_city, cost[next_city]});
+                        }
+                    }
+                }
+            }
+        }
+        return cost[dst] == INT_MAX ? -1 : cost[dst];
+    }
+};

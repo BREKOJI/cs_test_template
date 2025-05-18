@@ -1,0 +1,38 @@
+//动态规划
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, 1);
+        int MAX = 1;
+        for (int i = 1; i < n; i ++ ) {
+            for (int j = 0; j < i; j ++ ) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                    MAX = max(dp[i], MAX);
+                }
+            }
+        }
+        return MAX;
+    }
+};
+//二分法+动态规划
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> tails(n);
+        int res = 0;
+        for (int num : nums) {
+            int i = 0, j = res;
+            while (i < j) {
+                int mid = i + (j - i) / 2;
+                if (tails[mid] < num) i = mid + 1;
+                else j = mid;
+            }
+            tails[i] = num;
+            if (res == j) res ++ ;
+        }
+        return res;
+    }
+};
