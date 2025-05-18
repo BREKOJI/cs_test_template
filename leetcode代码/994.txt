@@ -1,50 +1,46 @@
 class Solution {
+
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int N = grid.size();
-        int M = grid[0].size();
         queue<pair<int, int>> q;
-        int count = 0; //表示新鲜橘子数量
-        for (int r = 0; r < N; r ++ ) {
-            for (int c = 0; c < M; c ++ ) {
-                if (grid[r][c] == 1)
-                    count ++ ;
-                else if (grid[r][c] == 2)
-                    q.push({r, c});
+        int count = 0;// fresh oranges
+        int rounds = 0;// circles
+        int rows = grid.size(), cols = grid[0].size();
+        for (int i = 0; i < rows; i ++ ) {
+            for (int j = 0; j < cols; j ++ ) {
+                if (grid[i][j] == 2) q.emplace(i, j);
+                else if (grid[i][j] == 1) count ++ ;
             }
         }
-        int round = 0;
-        while (count > 0 && !q.empty()) {
-            round ++ ;
-            int n = q.size();
-            for (int i = 0; i < n; i ++ ) {
-                auto orange = q.front();
+        while (!q.empty()) {
+            int cnt = q.size();
+            for (int i = 0; i < cnt; i ++ ) {
+                auto [x, y] = q.front();
                 q.pop();
-                int r = orange.first;
-                int c = orange.second;
-                if (r - 1 >= 0 && grid[r - 1][c] == 1) {
-                    grid[r - 1][c] = 2;
+                if (x + 1 < rows && grid[x + 1][y] == 1) {
+                    grid[x + 1][y] = 2;
+                    q.emplace(x + 1, y);
                     count -- ;
-                    q.push({r - 1, c});
                 }
-                if (r + 1 < N && grid[r + 1][c] == 1) {
-                    grid[r + 1][c] = 2;
+                if (x - 1 >= 0 && grid[x - 1][y] == 1) {
+                    grid[x - 1][y] = 2;
+                    q.emplace(x - 1, y);
                     count -- ;
-                    q.push({r + 1, c});
                 }
-                if (c - 1 >= 0 && grid[r][c - 1] == 1) {
-                    grid[r][c - 1] = 2;
+                if (y + 1 < cols && grid[x][y + 1] == 1) {
+                    grid[x][y + 1] = 2;
+                    q.emplace(x, y + 1);
                     count -- ;
-                    q.push({r, c - 1});
                 }
-                if (c + 1 < M && grid[r][c + 1] == 1) {
-                    grid[r][c + 1] = 2;
+                if (y - 1 >= 0 && grid[x][y - 1] == 1) {
+                    grid[x][y - 1] = 2;
+                    q.emplace(x, y - 1);
                     count -- ;
-                    q.push({r, c + 1});
                 }
             }
+            if (!q.empty()) rounds ++ ;
         }
-        if (count > 0) return -1;
-        else return round;
+        if (count == 0) return rounds;
+        else return -1;
     }
 };

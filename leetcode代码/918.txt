@@ -1,0 +1,59 @@
+//超内存超时
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& nums) {
+        int n = nums.size();
+        int MAX = INT_MIN;
+        vector dp(2 * n, vector<int> (n + 1));
+        for (int i = 1; i < 2 * n; i ++ ) {
+            for (int j = 1; j <= i && j <= n; j ++ ) {
+                dp[i][j] = dp[i - 1][j - 1] + nums[i % n];
+                MAX = max(MAX, dp[i][j]);
+            }
+        }
+        return MAX;
+    }
+};
+
+//优化后不超内存
+//超时
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& nums) {
+        int n = nums.size();
+        int MAX = INT_MIN;
+        vector<int> dp(n + 1);
+        for (int i = 1; i < 2 * n; i ++ ) {
+            for (int j = min(i, n); j >= 1; j -- ) {
+                dp[j] = dp[j - 1] + nums[i % n];
+                MAX = max(MAX, dp[j]);
+            }
+        }
+        return MAX;
+    }
+};
+
+// 其他方法
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& nums) {
+        int n = nums.size();
+        int MAX = INT_MIN;
+        int MIN = INT_MAX;
+        int lastmax = INT_MIN / 2;
+        int lastmin = INT_MAX / 2;
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        cout << sum << endl;
+        for (int i = 0; i < n; i ++ ) {
+            MAX = max(MAX, nums[i]);
+        }
+        if (MAX < 0) return MAX;
+        for (int i = 1; i <= n; i ++ )  {
+            lastmax = max(lastmax + nums[i - 1], nums[i - 1]);
+            MAX = max(MAX, lastmax);
+            lastmin = min(lastmin + nums[i - 1], nums[i - 1]);
+            MIN = min(MIN, lastmin);
+        }
+        return max(sum - MIN, MAX);
+    }
+};

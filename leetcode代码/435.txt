@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        if (intervals.empty()) return 0;
+        ranges::sort(intervals, {}, [](const auto & a) {return a[1];});
+        int right = INT_MIN;
+        int count = 0;
+        for (const auto & interval : intervals) {
+            if (interval[0] >= right) {
+                right = interval[1];
+            }
+            else {
+                count ++ ;
+            }
+        }
+        return count;
+    }
+};

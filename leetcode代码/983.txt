@@ -1,0 +1,23 @@
+class Solution {
+    int pass_days[3] = {1, 7, 30};
+public:
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        int n = days.back();
+        vector<int> dp(n + 1, INT_MAX);
+        dp[0] = 0;
+        unordered_set<int> d;
+        for (auto day : days) d.insert(day);
+        for (int i = 1; i <= n; i ++ ) {
+            if (d.find(i) == d.end()) dp[i] = dp[i - 1];
+            else {
+                for (int j = 0; j < 3; j ++ ) {
+                    if (i - pass_days[j] >= 0) 
+                        dp[i] = min(dp[i], dp[i - pass_days[j]] + costs[j]);
+                    else 
+                        dp[i] = min(dp[i], costs[j]);
+                }
+            }
+        }
+        return dp[n];
+    }
+};

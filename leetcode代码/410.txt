@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int splitArray(vector<int>& nums, int k) {
+        int MAX = ranges::max(nums);
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        int l = MAX, r = sum;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            int temp = 0, cnt = 1;
+            for (const auto & num : nums) {
+                temp += num;
+                if (temp > mid) {
+                    temp = num;
+                    cnt ++ ;
+                }
+            }
+            if (cnt > k) l = mid + 1;
+            else r = mid; 
+        }
+        return l;
+    }
+};

@@ -1,0 +1,25 @@
+class Solution {
+    int n, m, sum = 0;
+    bool dfs(vector<vector<int>> & grid, int x, int y) {
+        if (x < 0 || x >= n || y < 0 || y >= m || grid[x][y] == 0) return false;
+        if (grid[x][y] == 2) return true;
+        sum += 4;
+        grid[x][y] = 2;
+        if (dfs(grid, x - 1, y)) sum -- ;
+        if (dfs(grid, x + 1, y)) sum -- ;
+        if (dfs(grid, x, y - 1)) sum -- ;
+        if (dfs(grid, x, y + 1)) sum -- ;
+        return true;
+    }
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        n = grid.size(), m = grid[0].size();
+        for (int i = 0; i < n; i ++ )
+            for (int j = 0; j < m; j ++ ) {
+                if (grid[i][j] == 1) {
+                    dfs(grid, i, j);
+                }
+            }
+        return sum;
+    }
+};

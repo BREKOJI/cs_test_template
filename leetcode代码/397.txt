@@ -1,0 +1,11 @@
+class Solution {
+    int dfs(long i) {
+        if (i == 1) return 0;
+        int ans = i % 2 == 0 ? dfs(i / 2) : min(dfs(i + 1), dfs(i - 1));
+        return ++ ans;
+    }
+public:
+    int integerReplacement(int n) {
+        return dfs(n);
+    }
+};
