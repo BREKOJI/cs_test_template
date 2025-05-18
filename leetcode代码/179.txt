@@ -1,0 +1,23 @@
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        int n = nums.size();
+        vector<string> nums_str;
+        for (auto num : nums) {
+            nums_str.push_back(to_string(num));
+        }
+        auto cmp = [](string a, string b) {
+            return a + b > b + a;
+        };
+        sort(nums_str.begin(), nums_str.end(), cmp);
+        stringstream ss;
+        for (auto num : nums_str) {
+            ss << num;
+        }
+        string ans = ss.str();
+        if (ans[0] == '0') {
+            return "0";
+        }
+        return ans;
+    }
+};

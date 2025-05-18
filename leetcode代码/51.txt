@@ -1,42 +1,41 @@
 class Solution {
-    vector<vector<string>> list;
-    vector<string> path;
-    vector<bool> col;
-    vector<bool> dig1; // 正对角线
-    vector<bool> dig2; // 斜对角线
+    vector<bool> dig1;
+    vector<bool> dig2;
+    vector<bool> rows;
+    vector<bool> cols;
+    vector<vector<string>> res;
+    vector<string> paths;
     int len;
     void dfs(int row) {
-        if (row == len) {
-            if (!path.empty())
-                list.emplace_back(path);
-            return;
-        }
+        if (row == len) res.emplace_back(paths);
         string line(len, '.');
-        for (int c = 0; c < len; c ++ ) {
-            int b1 = row - c + len; // 正对角线
-            int b2 = row + c; // 斜对角线
-            if (!col[c] && !dig1[b1] && !dig2[b2]) {
-                line[c] = 'Q';
-                col[c] = true;
-                dig1[b1] = true;
-                dig2[b2] = true;
-                path.emplace_back(line);
+        for (int col = 0; col < len; col ++ ) {
+            int d1 = row + col, d2 = row - col + len;
+            if (!rows[row] && !cols[col] && !dig1[d1] && !dig2[d2]) {
+                rows[row] = true;
+                cols[col] = true;
+                dig1[d1] = true;
+                dig2[d2] = true;
+                line[col] = 'Q';
+                paths.emplace_back(line);
                 dfs(row + 1);
-                line[c] = '.';
-                col[c] = false;
-                dig1[b1] = false;
-                dig2[b2] = false;
-                path.pop_back();
+                rows[row] = false;
+                cols[col] = false;
+                dig1[d1] = false;
+                dig2[d2] = false;
+                line[col] = '.';
+                paths.pop_back();
             }
         }
     }
 public:
     vector<vector<string>> solveNQueens(int n) {
-        col.assign(n, false);
-        dig1.assign(n * 2, false);
-        dig2.assign(n * 2, false);
+        dig1.resize(2 * n);
+        dig2.resize(2 * n);
+        rows.resize(n);
+        cols.resize(n);
         len = n;
         dfs(0);
-        return list;
+        return res;
     }
 };

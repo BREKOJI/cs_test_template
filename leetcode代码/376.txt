@@ -1,0 +1,32 @@
+class Solution {
+    int func(vector<int>& nums, bool flag_big) {
+        int pre = nums[0];
+        int n = nums.size();
+        int cnt = 1;
+        for (int i = 1; i < n; i ++ ) {
+            if (flag_big) {
+                if (nums[i] > pre) {
+                    flag_big = !flag_big;
+                    cnt ++ ;
+                }
+                pre = nums[i];
+            }
+            else {
+                if (nums[i] < pre) {
+                    flag_big = !flag_big;
+                    cnt ++ ;
+                }
+                pre = nums[i];
+            }
+        }
+        return cnt;
+    }
+public:
+    int wiggleMaxLength(vector<int>& nums) {
+        bool flag_big = true;
+        int MAX = func(nums, flag_big);
+        flag_big = false;
+        MAX = max(MAX, func(nums, flag_big));
+        return MAX;
+    }
+};
